@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_height="match_parent"
+     android:layout_width="match_parent">
+
+    <ImageView
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:src="@drawable/fundo"
+         android:layout_marginTop="250dp"
+         android:id="@+id/fundo" />
+
+    <com.google.android.gms.maps.MapView
+         android:layout_height="match_parent"
+         android:layout_width="match_parent"
+         android:apiKey="AIzaSyC4UVRx10NmwhLT8ve0HnOedFbXGxk4piI"
+         android:visibility="gone"
+         android:id="@+id/mapView" />
+
+    <LinearLayout
+         android:layout_height="match_parent"
+         android:layout_width="match_parent"
+         android:visibility="gone"
+         android:orientation="vertical">
+
+        <ScrollView
+             android:layout_height="0dp"
+             android:layout_width="match_parent"
+             android:layout_weight="1">
+
+            <EditText
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:scrollbars="vertical"
+                 android:gravity="top"
+                 android:textSize="20sp"
+                 android:textColor="#000000"
+                 android:id="@+id/tSat" />
+
+        </ScrollView>
+
+    </LinearLayout>
+
+    <LinearLayout
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:gravity="center"
+         android:orientation="vertical"
+         android:layout_alignParentTop="true"
+         android:id="@+id/data">
+
+        <LinearLayout
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:layout_marginBottom="4dp"
+             android:gravity="center"
+             android:orientation="horizontal"
+             android:id="@+id/datatop1">
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="0dp"
+                 android:gravity="center"
+                 android:layout_margin="3dp"
+                 android:textSize="20sp"
+                 android:textColor="#000000"
+                 android:layout_weight="1"
+                 android:id="@+id/tbear"
+                 android:text="bear" />
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="0dp"
+                 android:visibility="gone"
+                 android:gravity="center"
+                 android:layout_margin="3dp"
+                 android:textSize="20sp"
+                 android:textColor="#000000"
+                 android:layout_weight="1"
+                 android:id="@+id/tCel"
+                 android:text="cell" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+         android:layout_height="match_parent"
+         android:layout_width="match_parent"
+         android:gravity="center"
+         android:orientation="vertical"
+        android:visibility="gone"
+         android:layout_alignParentTop="true"
+         android:id="@+id/loading">
+
+        <TextView
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:gravity="center"
+             android:background="#7B1800"
+             android:layout_margin="3dp"
+             android:padding="10dp"
+             android:textSize="30sp"
+             android:textColor="#Ffffff"
+             android:id="@+id/tcarrgando"
+             android:text="carregando..." />
+
+    </LinearLayout>
+
+    <LinearLayout
+         android:layout_height="match_parent"
+         android:layout_width="match_parent"
+         android:gravity="bottom|center"
+         android:orientation="vertical"
+         android:shadowColor="#000000"
+         android:id="@+id/datagps">
+
+        <LinearLayout
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:layout_margin="4dp"
+             android:orientation="horizontal">
+
+            <TextView
+                 android:layout_height="match_parent"
+                 android:layout_width="match_parent"
+                 android:gravity="center"
+                 android:layout_margin="3dp"
+                 android:textColor="#000000"
+                 android:id="@+id/tTempo"
+                 android:text="00:00:00" />
+
+        </LinearLayout>
+
+        <LinearLayout
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:layout_margin="4dp"
+             android:orientation="horizontal">
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:gravity="center"
+                 android:layout_margin="3dp"
+                 android:textColor="#000000"
+                 android:id="@+id/turboTextView"
+                 android:text="Velocidade" />
+
+            <SeekBar
+                 android:layout_height="wrap_content"
+                 android:layout_width="0dp"
+                 android:max="10"
+                 android:layout_margin="3dp"
+                 android:layout_weight="2"
+                 android:id="@+id/turboSeekBar" />
+
+        </LinearLayout>
+
+        <LinearLayout
+             android:layout_height="2dp"
+             android:layout_width="match_parent"
+             android:gravity="center"
+             android:background="#000000">
+
+        </LinearLayout>
+
+        <LinearLayout
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:background="#7B1800"
+             android:gravity="center"
+             android:orientation="horizontal"
+             android:paddingBottom="3dp"
+             android:layout_marginTop="3dp"
+             android:id="@+id/datatop">
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="0dp"
+                 android:gravity="center"
+                 android:layout_margin="3dp"
+                 android:textSize="20sp"
+                 android:textColor="#FFD888"
+                 android:layout_weight="1"
+                 android:id="@+id/tspeed"
+                 android:text="Speed" />
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="0dp"
+                 android:gravity="center"
+                 android:layout_margin="3dp"
+                 android:textSize="20sp"
+                 android:textColor="#FFD888"
+                 android:layout_weight="1"
+                 android:id="@+id/talti"
+                 android:text="Altitude" />
+
+        </LinearLayout>
+
+        <LinearLayout
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:layout_marginBottom="0dp"
+             android:gravity="center"
+             android:background="#FF8100"
+             android:padding="6dp"
+             android:layout_marginTop="1dp">
+
+            <Switch
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:layout_marginBottom="0dp"
+                 android:layout_margin="3dp"
+                 android:textSize="20sp"
+                 android:textColor="#FFD888"
+                 android:layout_marginTop="0dp"
+                 android:checked="false"
+                 android:text="Fake gps"
+                 android:id="@+id/checkfake" />
+
+            <Switch
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:layout_marginBottom="0dp"
+                 android:layout_margin="3dp"
+                 android:textSize="20sp"
+                 android:textColor="#FFD888"
+                 android:layout_marginTop="0dp"
+                 android:checked="true"
+                 android:text="Centralizar mapa"
+                 android:id="@+id/checkloc" />
+
+        </LinearLayout>
+
+        <LinearLayout
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:gravity="center"
+             android:background="#FF8100"
+             android:layout_marginTop="0dp"
+             android:paddingTop="0dp">
+
+            <Button
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:gravity="center"
+                 android:background="#7B1800"
+                 android:layout_margin="8dp"
+                 android:textSize="20sp"
+                 android:textColor="#FFD888"
+                 android:layout_marginTop="3dp"
+                 android:layout_weight="1"
+                 android:text="Gerar Rota"
+                 android:id="@+id/brota" />
+
+            <Button
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:background="#7B1800"
+                 android:layout_margin="8dp"
+                 android:textSize="20sp"
+                 android:textColor="#FFD888"
+                 android:layout_marginTop="3dp"
+                 android:layout_weight="1"
+                 android:text="Teletransporte"
+                 android:id="@+id/bpulo" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>
