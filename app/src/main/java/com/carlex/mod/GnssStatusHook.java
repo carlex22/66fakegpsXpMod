@@ -1,5 +1,13 @@
 package com.carlex.mod;
 
+
+
+import android.content.Intent;
+
+import android.app.Activity;
+import android.content.ComponentName;
+import android.content.IntentFilter;
+
 import android.content.Context;
 import android.location.GnssStatus;
 import android.location.LocationManager;
@@ -49,6 +57,9 @@ public class GnssStatusHook implements IXposedHookLoadPackage {
             }
         );
     }*/
+    
+    private DATAgnss dataReceiver;
+
 
     @Override
     public void handleLoadPackage(final XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
@@ -61,6 +72,31 @@ public class GnssStatusHook implements IXposedHookLoadPackage {
                 new XC_MethodHook() {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                        
+                        if (!DATAgnss.isRunning) {
+                    //DataReceiver dataReceiver = new DataReceiver();
+                    //IntentFilter filter = new IntentFilter("com.carlex.drive.ACTION_SEND_DATA");
+                    Context context = (Context) XposedHelpers.getObjectField(param.thisObject, "mContext");
+        
+                    //  Context context = (Context) XposedHelpers.callMethod(XposedHelpers.callStaticMethod(
+                    //5   XposedHelpers.findClass("android.app.ActivityThread", lpparam.classLoader), "currentApplication"), "getApplicationContext");
+                    
+                    // Registrar o BroadcastReceiver
+                    dataReceiver = new DATAgnss();
+                    IntentFilter filter = new IntentFilter("com.carlex.drive.ACTION_SEND_DATA");
+                    context.registerReceiver(dataReceiver, filter);
+            
+                    // Iniciar o Serviço do Emissor
+                    Intent intent = new Intent();
+                    intent.setComponent(new ComponentName("com.carlex.drive", "com.carlex.drive.DataServiceGnss"));
+                    context.startService(intent);     
+                        
+                    Log.i(TAG, "register Data from receiver ");
+              
+                        
+                }    else Log.i(TAG, "ja tem register Data from receiver ");
+       
+                        
                         final GnssStatus.Callback originalCallback = (GnssStatus.Callback) param.args[0];
                         try {
                             GnssStatus.Callback hookedCallback = new GnssStatus.Callback() {
@@ -114,6 +150,30 @@ public class GnssStatusHook implements IXposedHookLoadPackage {
         } catch (Exception e) {
             Log.e(TAG, "Error setting file permissions: " + e.getMessage());
         }*/
+        
+       StringBuilder content = DATAgnss.allPrefs;
+              Log.i(TAG, "Data from receiver "+content);
+          
+
+        if (content == null || content.length() == 0) {
+            return;
+        }
+        
+        try{
+            JSONArray jsonArray = new JSONArray(content.toString());
+            if (jsonArray.length() > 0) {
+                //JSONObject jsonObject = jsonArray.getJSONObject(0);
+               // return jsonArray.getJSONObject(0);
+                satelliteData = new JSONArray(jsonArray.toString());
+            }
+        } catch (JSONException e) {
+                 Log.i(TAG,  " Error reading cell data: " + e.getMessage());
+        }
+        Log.i(TAG, " readCellData: Falha ao ler dados da célula");
+        
+        
+        
+        /*
 
         File file = new File(DIRECTORY_PATH, CELL_DATA_FILE);
 
@@ -137,7 +197,7 @@ public class GnssStatusHook implements IXposedHookLoadPackage {
             satelliteData = new JSONArray(jsonString.toString());
         } catch (IOException | JSONException e) {
             Log.e(TAG, "Error reading satellite data from JSON file: ", e);
-        }
+        }*/
     }
 
     public CustomGnssStatus createFakeGnssStatus(GnssStatus originalStatus) {

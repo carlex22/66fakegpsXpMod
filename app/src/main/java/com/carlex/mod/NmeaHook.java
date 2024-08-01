@@ -10,6 +10,12 @@ import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import android.content.Intent;
+
+import android.app.Activity;
+import android.content.ComponentName;
+import android.content.IntentFilter;
+
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -24,7 +30,7 @@ public class NmeaHook implements IXposedHookLoadPackage {
     private static final String TAG = "xNMEAHook";
     private static final String DIRECTORY_PATH = "/storage/emulated/0/carlex/";
     private static final String INPUT_FILE = "locations.json";
-
+    private static DataReceiver dataReceiver;
     private static Context systemContext;
     private static String NMEA = "$GPGGA,123519,4807.038,N,01131.000,E,1,08,0.9,545.4,M,46.9,M,,";
     /*
@@ -49,15 +55,46 @@ public class NmeaHook implements IXposedHookLoadPackage {
         }
         */
         
-       File file = new File(DIRECTORY_PATH, INPUT_FILE);
+      // File file = new File(DIRECTORY_PATH, INPUT_FILE);
         
         
        // File file = new File(FILE_PATH);
       //  File file = SuFile.open(DIRECTORY_PATH, INPUT_FILE);
       
-      try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+     // try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
  
-        if (!file.exists()) {
+            
+        // StringBuilder content = DataReceiver.allPrefs;
+            //  Log.i(TAG, "Data from receiver "+content);
+          
+        
+       // Registrar o DataReceiver
+                
+       
+        StringBuilder content = DataReceiver.allPrefs;
+              Log.i(TAG, "Data from receiver "+content);
+          
+
+        
+
+        if (content == null || content.length() == 0) {
+            return ;
+        }
+        
+        try{
+            JSONArray jsonArray = new JSONArray(content.toString());
+            if (jsonArray.length() > 0) {
+                JSONObject jsonObject = jsonArray.getJSONObject(0);
+                NMEA = jsonObject.getString("nmea");
+            }
+        } catch (JSONException e) {
+                 //log(TAG + ": Error reading cell data: " + e.getMessage());
+        }
+        // log(TAG + ": readCellData: Falha ao ler dados da célula");
+        
+        return;
+               
+        /*  if (!file.exists()) {
             Log.e(TAG, "File not found: " + INPUT_FILE);
             return;
         }
@@ -85,7 +122,7 @@ public class NmeaHook implements IXposedHookLoadPackage {
             }
         } catch (IOException | JSONException e) {
             //Log.e(TAG, "Error reading NMEA from JSON file: ", e);
-        }
+        }*/
     }
 
    
@@ -103,6 +140,32 @@ public class NmeaHook implements IXposedHookLoadPackage {
                 protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                     final OnNmeaMessageListener originalListener = (OnNmeaMessageListener) param.args[0];
 
+                       if (!DataReceiver.isRunning) {
+                    //DataReceiver dataReceiver = new DataReceiver();
+                    //IntentFilter filter = new IntentFilter("com.carlex.drive.ACTION_SEND_DATA");
+                    Context context = (Context) XposedHelpers.getObjectField(param.thisObject, "mContext");
+        
+                    //  Context context = (Context) XposedHelpers.callMethod(XposedHelpers.callStaticMethod(
+                    //5   XposedHelpers.findClass("android.app.ActivityThread", lpparam.classLoader), "currentApplication"), "getApplicationContext");
+                    
+                    // Registrar o BroadcastReceiver
+                    dataReceiver = new DataReceiver();
+                    IntentFilter filter = new IntentFilter("com.carlex.drive.ACTION_SEND_DATA");
+                    context.registerReceiver(dataReceiver, filter);
+            
+                    // Iniciar o Serviço do Emissor
+                    Intent intent = new Intent();
+                    intent.setComponent(new ComponentName("com.carlex.drive", "com.carlex.drive.DataService"));
+                    context.startService(intent);     
+                        
+                    Log.i(TAG, "register Data from receiver ");
+              
+                        
+                }    else Log.i(TAG, "ja tem register Data from receiver ");
+  
+                        
+                        
+                        
                     OnNmeaMessageListener hookedListener = new OnNmeaMessageListener() {
                         @Override
                         public void onNmeaMessage(String message, long timestamp) {

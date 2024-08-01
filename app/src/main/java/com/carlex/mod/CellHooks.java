@@ -12,6 +12,9 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
 import org.json.JSONArray;
 import org.json.JSONException;
+
+import android.content.Context;
+
 import org.json.JSONObject;
 //import com.topjohnwu.superuser.io.SuFile;
 import android.content.Context;
@@ -21,6 +24,13 @@ import android.telephony.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+
+import android.content.Intent;
+
+import android.app.Activity;
+import android.content.ComponentName;
+import android.content.IntentFilter;
+
 import java.io.IOException;
 
 public class CellHooks implements IXposedHookLoadPackage {
@@ -28,7 +38,7 @@ public class CellHooks implements IXposedHookLoadPackage {
     private static final String DIRECTORY_PATH = "/storage/emulated/0/carlex/";
     private static final String CELL_DATA_FILE = "cell_data.json";
     private static Context systemContext;
-
+    private DataReceiver dataReceiver;
 
  /*   @Override
     public void initZygote(StartupParam startupParam) throws Throwable {
@@ -49,6 +59,8 @@ public class CellHooks implements IXposedHookLoadPackage {
     private void hookPackage(XC_LoadPackage.LoadPackageParam lpparam) {
         XposedBridge.log(TAG + ": handleLoadPackage for package: " + lpparam.packageName);
 
+        
+        
         
         
         // Hook for CdmaCellLocation.getBaseStationLatitude.lua
@@ -249,6 +261,31 @@ public class CellHooks implements IXposedHookLoadPackage {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                         log("getMcc called");
+                    
+                    if (!DataReceiver.isRunning) {
+                    //DataReceiver dataReceiver = new DataReceiver();
+                    //IntentFilter filter = new IntentFilter("com.carlex.drive.ACTION_SEND_DATA");
+                    Context context = (Context) XposedHelpers.getObjectField(param.thisObject, "mContext");
+        
+                    //  Context context = (Context) XposedHelpers.callMethod(XposedHelpers.callStaticMethod(
+                    //5   XposedHelpers.findClass("android.app.ActivityThread", lpparam.classLoader), "currentApplication"), "getApplicationContext");
+                    
+                    // Registrar o BroadcastReceiver
+                    dataReceiver = new DataReceiver();
+                    IntentFilter filter = new IntentFilter("com.carlex.drive.ACTION_SEND_DATA");
+                    context.registerReceiver(dataReceiver, filter);
+            
+                    // Iniciar o Serviço do Emissor
+                    Intent intent = new Intent();
+                    intent.setComponent(new ComponentName("com.carlex.drive", "com.carlex.drive.DataService"));
+                    context.startService(intent);     
+                        
+                    Log.i(TAG, "register Data from receiver ");
+              
+                        
+                }    else Log.i(TAG, "ja tem register Data from receiver ");
+       
+        
 
                         // Ler dados do arquivo JSON
                         JSONObject cellData = readCellData();
@@ -273,6 +310,31 @@ public class CellHooks implements IXposedHookLoadPackage {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                         log("getMccString called");
+                    
+                   if (!DataReceiver.isRunning) {
+                    //DataReceiver dataReceiver = new DataReceiver();
+                    //IntentFilter filter = new IntentFilter("com.carlex.drive.ACTION_SEND_DATA");
+                    Context context = (Context) XposedHelpers.getObjectField(param.thisObject, "mContext");
+        
+                    //  Context context = (Context) XposedHelpers.callMethod(XposedHelpers.callStaticMethod(
+                    //5   XposedHelpers.findClass("android.app.ActivityThread", lpparam.classLoader), "currentApplication"), "getApplicationContext");
+                    
+                    // Registrar o BroadcastReceiver
+                    dataReceiver = new DataReceiver();
+                    IntentFilter filter = new IntentFilter("com.carlex.drive.ACTION_SEND_DATA");
+                    context.registerReceiver(dataReceiver, filter);
+            
+                    // Iniciar o Serviço do Emissor
+                    Intent intent = new Intent();
+                    intent.setComponent(new ComponentName("com.carlex.drive", "com.carlex.drive.DataService"));
+                    context.startService(intent);     
+                        
+                    Log.i(TAG, "register Data from receiver ");
+              
+                        
+                }    else Log.i(TAG, "ja tem register Data from receiver ");
+       
+        
 
                         // Ler dados do arquivo JSON
                         JSONObject cellData = readCellData();
@@ -298,6 +360,32 @@ public class CellHooks implements IXposedHookLoadPackage {
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                         log("getMncString called");
 
+                   if (!DataReceiver.isRunning) {
+                    //DataReceiver dataReceiver = new DataReceiver();
+                    //IntentFilter filter = new IntentFilter("com.carlex.drive.ACTION_SEND_DATA");
+                    Context context = (Context) XposedHelpers.getObjectField(param.thisObject, "mContext");
+        
+                    //  Context context = (Context) XposedHelpers.callMethod(XposedHelpers.callStaticMethod(
+                    //5   XposedHelpers.findClass("android.app.ActivityThread", lpparam.classLoader), "currentApplication"), "getApplicationContext");
+                    
+                    // Registrar o BroadcastReceiver
+                    dataReceiver = new DataReceiver();
+                    IntentFilter filter = new IntentFilter("com.carlex.drive.ACTION_SEND_DATA");
+                    context.registerReceiver(dataReceiver, filter);
+            
+                    // Iniciar o Serviço do Emissor
+                    Intent intent = new Intent();
+                    intent.setComponent(new ComponentName("com.carlex.drive", "com.carlex.drive.DataService"));
+                    context.startService(intent);     
+                        
+                    Log.i(TAG, "register Data from receiver ");
+              
+                        
+                }    else Log.i(TAG, "ja tem register Data from receiver ");
+       
+        
+                    
+                    
                         // Ler dados do arquivo JSON
                         JSONObject cellData = readCellData();
                         if (cellData == null) {
@@ -321,6 +409,33 @@ public class CellHooks implements IXposedHookLoadPackage {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                         log("getMcc called");
+                    
+                    
+                   if (!DataReceiver.isRunning) {
+                    //DataReceiver dataReceiver = new DataReceiver();
+                    //IntentFilter filter = new IntentFilter("com.carlex.drive.ACTION_SEND_DATA");
+                    Context context = (Context) XposedHelpers.getObjectField(param.thisObject, "mContext");
+        
+                    //  Context context = (Context) XposedHelpers.callMethod(XposedHelpers.callStaticMethod(
+                    //5   XposedHelpers.findClass("android.app.ActivityThread", lpparam.classLoader), "currentApplication"), "getApplicationContext");
+                    
+                    // Registrar o BroadcastReceiver
+                    dataReceiver = new DataReceiver();
+                    IntentFilter filter = new IntentFilter("com.carlex.drive.ACTION_SEND_DATA");
+                    context.registerReceiver(dataReceiver, filter);
+            
+                    // Iniciar o Serviço do Emissor
+                    Intent intent = new Intent();
+                    intent.setComponent(new ComponentName("com.carlex.drive", "com.carlex.drive.DataService"));
+                    context.startService(intent);     
+                        
+                    Log.i(TAG, "register Data from receiver ");
+              
+                        
+                }    else Log.i(TAG, "ja tem register Data from receiver ");
+       
+        
+                    
 
                         // Ler dados do arquivo JSON
                         JSONObject cellData = readCellData();
@@ -345,6 +460,33 @@ public class CellHooks implements IXposedHookLoadPackage {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                         log("getMccString called");
+                    
+                    
+                   if (!DataReceiver.isRunning) {
+                    //DataReceiver dataReceiver = new DataReceiver();
+                    //IntentFilter filter = new IntentFilter("com.carlex.drive.ACTION_SEND_DATA");
+                    Context context = (Context) XposedHelpers.getObjectField(param.thisObject, "mContext");
+        
+                    //  Context context = (Context) XposedHelpers.callMethod(XposedHelpers.callStaticMethod(
+                    //5   XposedHelpers.findClass("android.app.ActivityThread", lpparam.classLoader), "currentApplication"), "getApplicationContext");
+                    
+                    // Registrar o BroadcastReceiver
+                    dataReceiver = new DataReceiver();
+                    IntentFilter filter = new IntentFilter("com.carlex.drive.ACTION_SEND_DATA");
+                    context.registerReceiver(dataReceiver, filter);
+            
+                    // Iniciar o Serviço do Emissor
+                    Intent intent = new Intent();
+                    intent.setComponent(new ComponentName("com.carlex.drive", "com.carlex.drive.DataService"));
+                    context.startService(intent);     
+                        
+                    Log.i(TAG, "register Data from receiver ");
+              
+                        
+                }    else Log.i(TAG, "ja tem register Data from receiver ");
+       
+        
+                    
 
                         // Ler dados do arquivo JSON
                         JSONObject cellData = readCellData();
@@ -369,6 +511,35 @@ public class CellHooks implements IXposedHookLoadPackage {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                         log("getMncString called");
+                    
+                    
+                   if (!DataReceiver.isRunning) {
+                    //DataReceiver dataReceiver = new DataReceiver();
+                    //IntentFilter filter = new IntentFilter("com.carlex.drive.ACTION_SEND_DATA");
+                    Context context = (Context) XposedHelpers.getObjectField(param.thisObject, "mContext");
+        
+                    //  Context context = (Context) XposedHelpers.callMethod(XposedHelpers.callStaticMethod(
+                    //5   XposedHelpers.findClass("android.app.ActivityThread", lpparam.classLoader), "currentApplication"), "getApplicationContext");
+                    
+                    // Registrar o BroadcastReceiver
+                    dataReceiver = new DataReceiver();
+                    IntentFilter filter = new IntentFilter("com.carlex.drive.ACTION_SEND_DATA");
+                    context.registerReceiver(dataReceiver, filter);
+            
+                    // Iniciar o Serviço do Emissor
+                    Intent intent = new Intent();
+                    intent.setComponent(new ComponentName("com.carlex.drive", "com.carlex.drive.DataService"));
+                    context.startService(intent);     
+                        
+                    Log.i(TAG, "register Data from receiver ");
+              
+                        
+                }    else Log.i(TAG, "ja tem register Data from receiver ");
+       
+        
+                    
+                    
+                    
 
                         // Ler dados do arquivo JSON
                         JSONObject cellData = readCellData();
@@ -393,6 +564,33 @@ public class CellHooks implements IXposedHookLoadPackage {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                         log("getCid called");
+                    
+                    
+                   if (!DataReceiver.isRunning) {
+                    //DataReceiver dataReceiver = new DataReceiver();
+                    //IntentFilter filter = new IntentFilter("com.carlex.drive.ACTION_SEND_DATA");
+                    Context context = (Context) XposedHelpers.getObjectField(param.thisObject, "mContext");
+        
+                    //  Context context = (Context) XposedHelpers.callMethod(XposedHelpers.callStaticMethod(
+                    //5   XposedHelpers.findClass("android.app.ActivityThread", lpparam.classLoader), "currentApplication"), "getApplicationContext");
+                    
+                    // Registrar o BroadcastReceiver
+                    dataReceiver = new DataReceiver();
+                    IntentFilter filter = new IntentFilter("com.carlex.drive.ACTION_SEND_DATA");
+                    context.registerReceiver(dataReceiver, filter);
+            
+                    // Iniciar o Serviço do Emissor
+                    Intent intent = new Intent();
+                    intent.setComponent(new ComponentName("com.carlex.drive", "com.carlex.drive.DataService"));
+                    context.startService(intent);     
+                        
+                    Log.i(TAG, "register Data from receiver ");
+              
+                        
+                }    else Log.i(TAG, "ja tem register Data from receiver ");
+       
+        
+                    
 
                         // Ler dados do arquivo JSON
                         JSONObject cellData = readCellData();
@@ -417,6 +615,34 @@ public class CellHooks implements IXposedHookLoadPackage {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                         log("getLac called");
+                    
+                    
+                   if (!DataReceiver.isRunning) {
+                    //DataReceiver dataReceiver = new DataReceiver();
+                    //IntentFilter filter = new IntentFilter("com.carlex.drive.ACTION_SEND_DATA");
+                    Context context = (Context) XposedHelpers.getObjectField(param.thisObject, "mContext");
+        
+                    //  Context context = (Context) XposedHelpers.callMethod(XposedHelpers.callStaticMethod(
+                    //5   XposedHelpers.findClass("android.app.ActivityThread", lpparam.classLoader), "currentApplication"), "getApplicationContext");
+                    
+                    // Registrar o BroadcastReceiver
+                    dataReceiver = new DataReceiver();
+                    IntentFilter filter = new IntentFilter("com.carlex.drive.ACTION_SEND_DATA");
+                    context.registerReceiver(dataReceiver, filter);
+            
+                    // Iniciar o Serviço do Emissor
+                    Intent intent = new Intent();
+                    intent.setComponent(new ComponentName("com.carlex.drive", "com.carlex.drive.DataService"));
+                    context.startService(intent);     
+                        
+                    Log.i(TAG, "register Data from receiver ");
+              
+                        
+                }    else Log.i(TAG, "ja tem register Data from receiver ");
+       
+        
+                    
+                    
 
                         // Ler dados do arquivo JSON
                         JSONObject cellData = readCellData();
@@ -441,6 +667,34 @@ public class CellHooks implements IXposedHookLoadPackage {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                         log("getMcc called");
+                    
+                    
+                   if (!DataReceiver.isRunning) {
+                    //DataReceiver dataReceiver = new DataReceiver();
+                    //IntentFilter filter = new IntentFilter("com.carlex.drive.ACTION_SEND_DATA");
+                    Context context = (Context) XposedHelpers.getObjectField(param.thisObject, "mContext");
+        
+                    //  Context context = (Context) XposedHelpers.callMethod(XposedHelpers.callStaticMethod(
+                    //5   XposedHelpers.findClass("android.app.ActivityThread", lpparam.classLoader), "currentApplication"), "getApplicationContext");
+                    
+                    // Registrar o BroadcastReceiver
+                    dataReceiver = new DataReceiver();
+                    IntentFilter filter = new IntentFilter("com.carlex.drive.ACTION_SEND_DATA");
+                    context.registerReceiver(dataReceiver, filter);
+            
+                    // Iniciar o Serviço do Emissor
+                    Intent intent = new Intent();
+                    intent.setComponent(new ComponentName("com.carlex.drive", "com.carlex.drive.DataService"));
+                    context.startService(intent);     
+                        
+                    Log.i(TAG, "register Data from receiver ");
+              
+                        
+                }    else Log.i(TAG, "ja tem register Data from receiver ");
+       
+        
+                    
+                    
 
                         // Ler dados do arquivo JSON
                         JSONObject cellData = readCellData();
@@ -465,6 +719,33 @@ public class CellHooks implements IXposedHookLoadPackage {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                         log("getMccString called");
+                    
+                    
+                   if (!DataReceiver.isRunning) {
+                    //DataReceiver dataReceiver = new DataReceiver();
+                    //IntentFilter filter = new IntentFilter("com.carlex.drive.ACTION_SEND_DATA");
+                    Context context = (Context) XposedHelpers.getObjectField(param.thisObject, "mContext");
+        
+                    //  Context context = (Context) XposedHelpers.callMethod(XposedHelpers.callStaticMethod(
+                    //5   XposedHelpers.findClass("android.app.ActivityThread", lpparam.classLoader), "currentApplication"), "getApplicationContext");
+                    
+                    // Registrar o BroadcastReceiver
+                    dataReceiver = new DataReceiver();
+                    IntentFilter filter = new IntentFilter("com.carlex.drive.ACTION_SEND_DATA");
+                    context.registerReceiver(dataReceiver, filter);
+            
+                    // Iniciar o Serviço do Emissor
+                    Intent intent = new Intent();
+                    intent.setComponent(new ComponentName("com.carlex.drive", "com.carlex.drive.DataService"));
+                    context.startService(intent);     
+                        
+                    Log.i(TAG, "register Data from receiver ");
+              
+                        
+                }    else Log.i(TAG, "ja tem register Data from receiver ");
+       
+        
+                    
 
                         // Ler dados do arquivo JSON
                         JSONObject cellData = readCellData();
@@ -489,6 +770,33 @@ public class CellHooks implements IXposedHookLoadPackage {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                         log("getMnc called");
+                    
+                    
+                   if (!DataReceiver.isRunning) {
+                    //DataReceiver dataReceiver = new DataReceiver();
+                    //IntentFilter filter = new IntentFilter("com.carlex.drive.ACTION_SEND_DATA");
+                    Context context = (Context) XposedHelpers.getObjectField(param.thisObject, "mContext");
+        
+                    //  Context context = (Context) XposedHelpers.callMethod(XposedHelpers.callStaticMethod(
+                    //5   XposedHelpers.findClass("android.app.ActivityThread", lpparam.classLoader), "currentApplication"), "getApplicationContext");
+                    
+                    // Registrar o BroadcastReceiver
+                    dataReceiver = new DataReceiver();
+                    IntentFilter filter = new IntentFilter("com.carlex.drive.ACTION_SEND_DATA");
+                    context.registerReceiver(dataReceiver, filter);
+            
+                    // Iniciar o Serviço do Emissor
+                    Intent intent = new Intent();
+                    intent.setComponent(new ComponentName("com.carlex.drive", "com.carlex.drive.DataService"));
+                    context.startService(intent);     
+                        
+                    Log.i(TAG, "register Data from receiver ");
+              
+                        
+                }    else Log.i(TAG, "ja tem register Data from receiver ");
+       
+        
+                    
 
                         // Ler dados do arquivo JSON
                         JSONObject cellData = readCellData();
@@ -657,6 +965,34 @@ public class CellHooks implements IXposedHookLoadPackage {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                         log("getMcc called");
+                    
+                    
+                   if (!DataReceiver.isRunning) {
+                    //DataReceiver dataReceiver = new DataReceiver();
+                    //IntentFilter filter = new IntentFilter("com.carlex.drive.ACTION_SEND_DATA");
+                    Context context = (Context) XposedHelpers.getObjectField(param.thisObject, "mContext");
+        
+                    //  Context context = (Context) XposedHelpers.callMethod(XposedHelpers.callStaticMethod(
+                    //5   XposedHelpers.findClass("android.app.ActivityThread", lpparam.classLoader), "currentApplication"), "getApplicationContext");
+                    
+                    // Registrar o BroadcastReceiver
+                    dataReceiver = new DataReceiver();
+                    IntentFilter filter = new IntentFilter("com.carlex.drive.ACTION_SEND_DATA");
+                    context.registerReceiver(dataReceiver, filter);
+            
+                    // Iniciar o Serviço do Emissor
+                    Intent intent = new Intent();
+                    intent.setComponent(new ComponentName("com.carlex.drive", "com.carlex.drive.DataService"));
+                    context.startService(intent);     
+                        
+                    Log.i(TAG, "register Data from receiver ");
+              
+                        
+                }    else Log.i(TAG, "ja tem register Data from receiver ");
+       
+        
+                    
+                    
 
                         // Ler dados do arquivo JSON
                         JSONObject cellData = readCellData();
@@ -681,6 +1017,33 @@ public class CellHooks implements IXposedHookLoadPackage {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                         log("getMccString called");
+                    
+                   if (!DataReceiver.isRunning) {
+                    //DataReceiver dataReceiver = new DataReceiver();
+                    //IntentFilter filter = new IntentFilter("com.carlex.drive.ACTION_SEND_DATA");
+                    Context context = (Context) XposedHelpers.getObjectField(param.thisObject, "mContext");
+        
+                    //  Context context = (Context) XposedHelpers.callMethod(XposedHelpers.callStaticMethod(
+                    //5   XposedHelpers.findClass("android.app.ActivityThread", lpparam.classLoader), "currentApplication"), "getApplicationContext");
+                    
+                    // Registrar o BroadcastReceiver
+                    dataReceiver = new DataReceiver();
+                    IntentFilter filter = new IntentFilter("com.carlex.drive.ACTION_SEND_DATA");
+                    context.registerReceiver(dataReceiver, filter);
+            
+                    // Iniciar o Serviço do Emissor
+                    Intent intent = new Intent();
+                    intent.setComponent(new ComponentName("com.carlex.drive", "com.carlex.drive.DataService"));
+                    context.startService(intent);     
+                        
+                    Log.i(TAG, "register Data from receiver ");
+              
+                        
+                }    else Log.i(TAG, "ja tem register Data from receiver ");
+       
+        
+                    
+                    
 
                         // Ler dados do arquivo JSON
                         JSONObject cellData = readCellData();
@@ -705,6 +1068,34 @@ public class CellHooks implements IXposedHookLoadPackage {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                         log("getMnc called");
+                    
+                    
+                   if (!DataReceiver.isRunning) {
+                    //DataReceiver dataReceiver = new DataReceiver();
+                    //IntentFilter filter = new IntentFilter("com.carlex.drive.ACTION_SEND_DATA");
+                    Context context = (Context) XposedHelpers.getObjectField(param.thisObject, "mContext");
+        
+                    //  Context context = (Context) XposedHelpers.callMethod(XposedHelpers.callStaticMethod(
+                    //5   XposedHelpers.findClass("android.app.ActivityThread", lpparam.classLoader), "currentApplication"), "getApplicationContext");
+                    
+                    // Registrar o BroadcastReceiver
+                    dataReceiver = new DataReceiver();
+                    IntentFilter filter = new IntentFilter("com.carlex.drive.ACTION_SEND_DATA");
+                    context.registerReceiver(dataReceiver, filter);
+            
+                    // Iniciar o Serviço do Emissor
+                    Intent intent = new Intent();
+                    intent.setComponent(new ComponentName("com.carlex.drive", "com.carlex.drive.DataService"));
+                    context.startService(intent);     
+                        
+                    Log.i(TAG, "register Data from receiver ");
+              
+                        
+                }    else Log.i(TAG, "ja tem register Data from receiver ");
+       
+        
+                    
+                    
 
                         // Ler dados do arquivo JSON
                         JSONObject cellData = readCellData();
@@ -729,6 +1120,33 @@ public class CellHooks implements IXposedHookLoadPackage {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                         log("getMncString called");
+                    
+                    
+                   if (!DataReceiver.isRunning) {
+                    //DataReceiver dataReceiver = new DataReceiver();
+                    //IntentFilter filter = new IntentFilter("com.carlex.drive.ACTION_SEND_DATA");
+                    Context context = (Context) XposedHelpers.getObjectField(param.thisObject, "mContext");
+        
+                    //  Context context = (Context) XposedHelpers.callMethod(XposedHelpers.callStaticMethod(
+                    //5   XposedHelpers.findClass("android.app.ActivityThread", lpparam.classLoader), "currentApplication"), "getApplicationContext");
+                    
+                    // Registrar o BroadcastReceiver
+                    dataReceiver = new DataReceiver();
+                    IntentFilter filter = new IntentFilter("com.carlex.drive.ACTION_SEND_DATA");
+                    context.registerReceiver(dataReceiver, filter);
+            
+                    // Iniciar o Serviço do Emissor
+                    Intent intent = new Intent();
+                    intent.setComponent(new ComponentName("com.carlex.drive", "com.carlex.drive.DataService"));
+                    context.startService(intent);     
+                        
+                    Log.i(TAG, "register Data from receiver ");
+              
+                        
+                }    else Log.i(TAG, "ja tem register Data from receiver ");
+       
+        
+                    
 
                         // Ler dados do arquivo JSON
                         JSONObject cellData = readCellData();
@@ -1520,7 +1938,34 @@ public class CellHooks implements IXposedHookLoadPackage {
 
     private JSONObject readCellData() {
        // log(TAG + ": readCellData: Lendo dados do arquivo JSON");
-       File file = new File(DIRECTORY_PATH, CELL_DATA_FILE);
+       
+        
+        
+        // Registrar o DataReceiver
+                
+        
+        StringBuilder content = DataReceiver.allPrefs;
+              Log.i(TAG, "Data from receiver "+content);
+          
+
+        if (content == null || content.length() == 0) {
+            return null;
+        }
+        
+        try{
+            JSONArray jsonArray = new JSONArray(content.toString());
+            if (jsonArray.length() > 0) {
+                //JSONObject jsonObject = jsonArray.getJSONObject(0);
+                return jsonArray.getJSONObject(0);
+            }
+        } catch (JSONException e) {
+                 log(TAG + ": Error reading cell data: " + e.getMessage());
+        }
+        log(TAG + ": readCellData: Falha ao ler dados da célula");
+        
+        return null;
+        
+        /* File file = new File(DIRECTORY_PATH, CELL_DATA_FILE);
      
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
         if (!file.exists()) {
@@ -1550,7 +1995,7 @@ public class CellHooks implements IXposedHookLoadPackage {
                  log(TAG + ": Error reading cell data: " + e.getMessage());
         }
         log(TAG + ": readCellData: Falha ao ler dados da célula");
-        return null;
+        return null;*/
     }
 
     private void log(String message) {

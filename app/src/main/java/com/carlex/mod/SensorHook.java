@@ -43,6 +43,7 @@ public class SensorHook implements IXposedHookLoadPackage {
     private static final String TAG = "SensorHook";
 
     private SensorEventListener originalAccelListener;
+    private DataReceiver dataReceiver;
     private SensorEventListener originalGyroListener;
     private SensorEventListener originalMagnetometerListener;
 
@@ -119,6 +120,31 @@ public class SensorHook implements IXposedHookLoadPackage {
         XposedBridge.hookAllMethods(SensorManager.class, "getSensorList", new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    
+                // Registrar o DataReceiver
+                if (!DataReceiver.isRunning) {
+                    //DataReceiver dataReceiver = new DataReceiver();
+                    //IntentFilter filter = new IntentFilter("com.carlex.drive.ACTION_SEND_DATA");
+                    Context context = (Context) XposedHelpers.getObjectField(param.thisObject, "mContext");
+        
+                    //  Context context = (Context) XposedHelpers.callMethod(XposedHelpers.callStaticMethod(
+                    //5   XposedHelpers.findClass("android.app.ActivityThread", lpparam.classLoader), "currentApplication"), "getApplicationContext");
+                    
+                    // Registrar o BroadcastReceiver
+                    dataReceiver = new DataReceiver();
+                    IntentFilter filter = new IntentFilter("com.carlex.drive.ACTION_SEND_DATA");
+                    context.registerReceiver(dataReceiver, filter);
+            
+                    // Iniciar o Serviço do Emissor
+                    Intent intent = new Intent();
+                    intent.setComponent(new ComponentName("com.carlex.drive", "com.carlex.drive.DataService"));
+                    context.startService(intent);     
+                        
+                    Log.i(TAG, "register Data from receiver ");
+              
+                        
+                }    else Log.i(TAG, "ja tem register Data from receiver ");
+                    
                 List<Sensor> originalList = (List<Sensor>) param.getResult();
                 List<Sensor> filteredList = new ArrayList<>();
 
@@ -132,24 +158,14 @@ public class SensorHook implements IXposedHookLoadPackage {
             }
         });
 
-        // Registrar o DataReceiver
-        if (!DataReceiver.isRunning) {
-            DataReceiver dataReceiver = new DataReceiver();
-            IntentFilter filter = new IntentFilter("com.carlex.drive.ACTION_SEND_DATA");
-            Context context = (Context) XposedHelpers.callMethod(XposedHelpers.callStaticMethod(
-                XposedHelpers.findClass("android.app.ActivityThread", lpparam.classLoader), "currentApplication"), "getApplicationContext");
-            context.registerReceiver(dataReceiver, filter);
-
-            // Iniciar o Serviço do Emissor
-            Intent intent = new Intent();
-            intent.setComponent(new ComponentName("com.carlex.drive", "com.carlex.drive.DataService"));
-            context.startService(intent);
-        }
+       
     }
 
     private float[] readSensorDataFromReceiver(int sensorType) {
         try {
             StringBuilder content = DataReceiver.allPrefs;
+              Log.i(TAG, "Data from receiver "+content);
+          
 
             if (content == null || content.length() == 0) {
                 return getDefaultValues(sensorType);
