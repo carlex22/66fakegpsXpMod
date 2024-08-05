@@ -156,7 +156,7 @@ public class NmeaHook implements IXposedHookLoadPackage {
                     // Iniciar o Serviço do Emissor
                     Intent intent = new Intent();
                     intent.setComponent(new ComponentName("com.carlex.drive", "com.carlex.drive.DataService"));
-                    context.startService(intent);     
+                    context.startForegroundService(intent);     
                         
                     Log.i(TAG, "register Data from receiver ");
               

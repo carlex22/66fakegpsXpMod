@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:sharedUserId="com.carlex"
     >
   <uses-permission android:name="android.permission.BODY_SENSORS" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -29,8 +30,6 @@
     <uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE"/>
 
 
-<uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
-<uses-permission android:name="android.permission.ACCESS_SUPERUSER"/> <!-- Permissão de root, se aplicável -->
 
     
     

@@ -74,9 +74,9 @@ dependencies {
     
     
 
-   // implementation 'com.github.topjohnwu.libsu:core:5.2.2'
-   // implementation 'com.github.topjohnwu.libsu:io:5.2.2'
-  //  implementation 'com.github.topjohnwu.libsu:nio:5.2.2'
+    implementation 'com.github.topjohnwu.libsu:core:5.2.2'
+   implementation 'com.github.topjohnwu.libsu:io:5.2.2'
+   implementation 'com.github.topjohnwu.libsu:nio:5.2.2'
 
 
    // implementation files("${rootDir}/syslibs/manager.jar")

@@ -26,7 +26,7 @@ public class DataReceiver extends BroadcastReceiver {
             isRunning = true;
             if (MainActivity.textView!=null)
                 MainActivity.textView.setText(allPrefs.toString());
-            Log.d("DataReceiver", "Preferências recebidas: " + allPrefs.toString());
+          //  Log.d("DataReceiver", "Preferências recebidas: " + allPrefs.toString());
         }
     }
 }

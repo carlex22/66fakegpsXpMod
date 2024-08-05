@@ -39,7 +39,10 @@ import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
-public class SensorHook implements IXposedHookLoadPackage {
+import de.robv.android.xposed.IXposedHookZygoteInit;
+
+
+public class SensorHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
     private static final String TAG = "SensorHook";
 
     private SensorEventListener originalAccelListener;
@@ -50,6 +53,17 @@ public class SensorHook implements IXposedHookLoadPackage {
     private Queue<float[]> accelHistory = new LinkedList<>();
     private Queue<float[]> gyroHistory = new LinkedList<>();
     private Queue<float[]> magnetometerHistory = new LinkedList<>();
+    
+    private static Context systemContext;
+    
+    @Override
+    public void initZygote(StartupParam startupParam) throws Throwable {
+        XposedBridge.log(TAG + ": initialized in Zygote");
+        
+        
+        
+    }
+
 
     @Override
     public void handleLoadPackage(final XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
@@ -58,7 +72,8 @@ public class SensorHook implements IXposedHookLoadPackage {
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                 SensorEventListener originalListener = (SensorEventListener) param.args[0];
                 Sensor sensor = (Sensor) param.args[1];
-
+                    
+                if (param.args[1] != null) 
                 if (sensor.getType() == Sensor.TYPE_ACCELEROMETER || sensor.getType() == Sensor.TYPE_GYROSCOPE || sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
                     SensorEventListener proxyListener = new SensorEventListener() {
                         @Override
@@ -96,24 +111,24 @@ public class SensorHook implements IXposedHookLoadPackage {
                     } else if (sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
                         originalMagnetometerListener = originalListener;
                     }
-                } else {
+                }/* else {
                     Log.d(TAG, "Blocking sensor type: " + sensor.getType());
                     param.setResult(null);
-                }
+                }*/
             }
         });
 
         XposedBridge.hookAllMethods(SensorManager.class, "unregisterListener", new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                SensorEventListener listener = (SensorEventListener) param.args[0];
+              /*  SensorEventListener listener = (SensorEventListener) param.args[0];
                 Sensor sensor = (Sensor) param.args[1];
 
                 if ((sensor.getType() == Sensor.TYPE_ACCELEROMETER && listener == originalAccelListener) ||
                     (sensor.getType() == Sensor.TYPE_GYROSCOPE && listener == originalGyroListener) ||
                     (sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD && listener == originalMagnetometerListener)) {
                     param.setResult(null);
-                }
+                }*/
             }
         });
 
@@ -138,7 +153,7 @@ public class SensorHook implements IXposedHookLoadPackage {
                     // Iniciar o Serviço do Emissor
                     Intent intent = new Intent();
                     intent.setComponent(new ComponentName("com.carlex.drive", "com.carlex.drive.DataService"));
-                    context.startService(intent);     
+                    context.startForegroundService(intent);     
                         
                     Log.i(TAG, "register Data from receiver ");
               

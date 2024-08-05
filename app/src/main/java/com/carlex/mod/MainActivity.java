@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.widget.TextView;
+import android.util.Log;
 
 
 public class MainActivity extends Activity {
@@ -32,16 +33,8 @@ public class MainActivity extends Activity {
         intent.setComponent(new ComponentName("com.carlex.drive", "com.carlex.drive.DataService"));
         startService(intent);
         
-       
-        // Registrar o BroadcastReceiver
-        dataReceiverG = new DATAgnss();
-        IntentFilter filterG = new IntentFilter("com.carlex.drive.ACTION_SEND_DATA");
-        registerReceiver(dataReceiverG, filterG);
-
-        // Iniciar o Serviço do Emissor
-        Intent intentG = new Intent();
-        intentG.setComponent(new ComponentName("com.carlex.drive", "com.carlex.drive.DataServiceGnss"));
-        startService(intentG);
+            
+        Log.i("carlex.mod", "register Data from receiver "+dataReceiver.toString());
         
         
     }
