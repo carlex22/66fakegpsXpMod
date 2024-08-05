@@ -2,3 +2,4 @@ com.carlex.mod.SensorHook
 com.carlex.mod.NmeaHook
 com.carlex.mod.CellHooks
 com.carlex.mod.GnssStatusHook
+com.carlex.mod.GnssMeasurementsHook
