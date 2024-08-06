@@ -1,6 +1,6 @@
 ### 66FakeGPSXpMod - Descrição Técnica
 
-**66FakeGPSXpMod** é um módulo avançado para o aplicativo 66FakeGPS, desenvolvido para funcionar com o Xposed Framework e Magisk. Este plugin permite aos desenvolvedores Android simular coordenadas GPS, essencial para testes em aplicações que dependem de dados de localização, proporcionando um ambiente de desenvolvimento mais controlado e eficiente.
+**66FakeGPSXpMod** é um módulo avançado para o aplicativo [66FakeGPS](https://github.com/carlex22/66fakegps), desenvolvido para funcionar com o Xposed Framework e Magisk. Este plugin permite aos desenvolvedores Android simular coordenadas GPS, essencial para testes em aplicações que dependem de dados de localização, proporcionando um ambiente de desenvolvimento mais controlado e eficiente.
 
 #### Funcionalidades
 
@@ -37,6 +37,8 @@ Além da simulação de coordenadas GPS, o 66FakeGPSXpMod pode simular dados de 
 - Inicie o serviço de simulação de localização no 66FakeGPS.
 - Use o 66FakeGPSXpMod para simular diferentes cenários e validar as funcionalidades de seus aplicativos. Isso pode incluir testar como o aplicativo responde a mudanças rápidas de localização, diferentes condições de recepção de sinal GNSS e variações na conectividade de rede móvel.
 
-### Conclusão
+### Agradecimentos
 
-O **66FakeGPSXpMod** é uma ferramenta poderosa e flexível que facilita a simulação de coordenadas GPS e outras condições de localização em dispositivos Android. Sua integração com Xposed e Magisk oferece aos desenvolvedores um controle detalhado sobre o ambiente de teste, permitindo uma validação precisa e eficaz das funcionalidades baseadas em localização. Com capacidades avançadas de personalização de status GNSS e geração de sentenças NMEA, este módulo é essencial para qualquer desenvolvedor que precisa testar aplicativos que dependem de dados de localização.
+O desenvolvimento do **66FakeGPSXpMod** foi possível graças ao apoio da comunidade de desenvolvedores e à ajuda inestimável do ChatGPT, da OpenAI, que forneceu suporte técnico crucial durante o processo de desenvolvimento. 
+
+Para mais detalhes e instalação, acesse o [repositório GitHub](https://github.com/carlex22/66fakegpsXpMod). Para conhecer o aplicativo principal, visite [66FakeGPS](https://github.com/carlex22/66fakegps).
