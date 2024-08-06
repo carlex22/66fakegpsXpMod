@@ -1,3 +1,8 @@
+####ATENÇAO... ESSE É UMA VERSÃO BETA####
+ESTARA DISPONÍVEL ATE O MES DE SETEMBRO/2024..
+APOS ESSA DATA, ATUALIZE O APK.
+
+
 ### 66FakeGPSXpMod - Descrição Técnica
 
 **66FakeGPSXpMod** é um módulo avançado para o aplicativo [66FakeGPS](https://github.com/carlex22/66fakegps), desenvolvido para funcionar com o Xposed Framework e Magisk. Este plugin permite aos desenvolvedores Android simular coordenadas GPS, essencial para testes em aplicações que dependem de dados de localização, proporcionando um ambiente de desenvolvimento mais controlado e eficiente.
